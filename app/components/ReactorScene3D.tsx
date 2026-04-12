@@ -191,7 +191,7 @@ function ReactorVessel({
   onHover: (h: boolean) => void;
 }) {
   const meshRef = useRef<any>(null!);
-  const glowRef = useRef<any>(null!);
+  const rotationY = useRef(index);
   
   // Arrange in a wide semi-circle
   const angle = (index / (total - 1)) * Math.PI * 1.5 - Math.PI * 0.75;
@@ -200,20 +200,19 @@ function ReactorVessel({
   const baseZ = -Math.cos(angle) * radius * 0.7;
   const baseY = 0.5 + Math.sin(index * 1.5) * 0.3;
 
-  useFrame((state) => {
+  useFrame((state, delta) => {
     const t = state.clock.elapsedTime;
     if (meshRef.current) {
       meshRef.current.position.y = baseY + Math.sin(t * 0.7 + index * 1.2) * 0.1;
-      meshRef.current.rotation.y = t * 0.2 + index;
+      
+      // Only rotate if not hovered
+      if (!isHovered) {
+        rotationY.current += delta * 0.2;
+      }
+      meshRef.current.rotation.y = rotationY.current;
+      
       const target = isHovered ? 1.15 : 1.0;
       meshRef.current.scale.lerp(new THREE.Vector3(target, target, target), 0.2);
-    }
-    if (glowRef.current) {
-      glowRef.current.position.y = baseY + Math.sin(t * 0.7 + index * 1.2) * 0.1;
-      const gScale = isHovered ? 1.8 : 1.2;
-      glowRef.current.scale.lerp(new THREE.Vector3(gScale, gScale, gScale), 0.2);
-      (glowRef.current.material as THREE.MeshBasicMaterial).opacity =
-        isHovered ? 0.4 : 0.05 + Math.sin(t * 1.5 + index) * 0.03;
     }
   });
 
@@ -303,60 +302,57 @@ function ReactorVessel({
     >
       <Scaffolding position={[baseX, baseY, baseZ]} color={unit.color} />
 
-      <Sphere args={[1.2, 16, 16]} ref={glowRef} position={[baseX, baseY, baseZ]}>
-        <meshBasicMaterial color={unit.color} transparent opacity={0.1} side={THREE.BackSide} />
-      </Sphere>
-
       {getShape()}
 
       {/* Prominent Label Highlights */}
-      <group position={[baseX, -1.2, baseZ]}>
-        {/* Base Plate */}
-        <mesh position={[0, -0.4, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-          <planeGeometry args={[2.5, 0.8]} />
-          <meshBasicMaterial color={isHovered ? unit.color : "rgba(0,0,0,0.8)"} transparent opacity={isHovered ? 0.3 : 0.8} />
-        </mesh>
-        
-        {/* Unit Name - Scales dramatically on Hover */}
-        <Text 
-          position={[0, -0.2, 0.01]} 
-          fontSize={isHovered ? 0.28 : 0.18} 
-          color={isHovered ? '#FFFFFF' : unit.color} 
-          anchorX="center" 
-          anchorY="bottom"
-          fontWeight={isHovered ? "bold" : "normal"}
-        >
-          {unit.subtitle.split(' — ')[0]}
-        </Text>
-        
-        <Text 
-          position={[0, -0.5, 0.01]} 
-          fontSize={0.12} 
-          color={isHovered ? '#FFF' : "rgba(255,255,255,0.6)"} 
-          anchorX="center" 
-          anchorY="bottom"
-        >
-          {unit.period}
-        </Text>
+      {!isHovered && (
+        <group position={[baseX, -1.2, baseZ]}>
+          {/* Base Plate */}
+          <mesh position={[0, -0.4, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+            <planeGeometry args={[2.5, 0.8]} />
+            <meshBasicMaterial color="rgba(0,0,0,0.8)" transparent opacity={0.8} />
+          </mesh>
+          
+          {/* Unit Name - Scales dramatically on Hover */}
+          <Text 
+            position={[0, -0.2, 0.01]} 
+            fontSize={0.18} 
+            color={unit.color} 
+            anchorX="center" 
+            anchorY="bottom"
+          >
+            {unit.subtitle.split(' — ')[0]}
+          </Text>
+          
+          <Text 
+            position={[0, -0.5, 0.01]} 
+            fontSize={0.12} 
+            color="rgba(255,255,255,0.6)" 
+            anchorX="center" 
+            anchorY="bottom"
+          >
+            {unit.period}
+          </Text>
+        </group>
+      )}
 
-        {isHovered && (
-          <Html position={[0, 1, 0]} center>
-            <div style={{
-              background: 'rgba(0,0,0,0.9)', border: `1px solid ${unit.color}`, padding: '8px 16px',
-              borderRadius: '12px', color: '#fff', fontSize: '14px', whiteSpace: 'nowrap',
-              boxShadow: `0 0 20px ${unit.color}`, pointerEvents: 'none',
-              fontFamily: 'monospace', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '4px'
-            }}>
-              <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '1px' }}>
-                ◉ Inspect Unit
-              </span>
-              <span style={{ color: unit.color, fontWeight: 'bold' }}>
-                {unit.subtitle.split(' — ')[0]}
-              </span>
-            </div>
-          </Html>
-        )}
-      </group>
+      {isHovered && (
+        <Html position={[0, 1, 0]} center>
+          <div style={{
+            background: 'rgba(0,0,0,0.9)', border: `1px solid ${unit.color}`, padding: '8px 16px',
+            borderRadius: '12px', color: '#fff', fontSize: '14px', whiteSpace: 'nowrap',
+            boxShadow: `0 0 20px ${unit.color}`, pointerEvents: 'none',
+            fontFamily: 'monospace', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '4px'
+          }}>
+            <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '1px' }}>
+              ◉ Inspect Unit
+            </span>
+            <span style={{ color: unit.color, fontWeight: 'bold' }}>
+              {unit.subtitle.split(' — ')[0]}
+            </span>
+          </div>
+        </Html>
+      )}
     </group>
   );
 }
