@@ -192,20 +192,7 @@ export default function PlantPortfolio() {
             />
           )}
 
-          {/* Legend */}
-          <div className="mt-8 flex flex-wrap justify-center gap-4 font-mono text-xs scroll-reveal" style={{ color: 'var(--chalk-dim)' }}>
-            {[
-              { color: '#8B7355', label: 'Feed Tank (Early Life)' },
-              { color: '#FF6B00', label: 'Reactor (High Intensity)' },
-              { color: '#FFB700', label: 'Compressor (Transition)' },
-              { color: '#00D4AA', label: 'Distillation (Refinement)' },
-            ].map(item => (
-              <div key={item.label} className="flex items-center gap-2">
-                <span style={{ width: 10, height: 10, borderRadius: '50%', background: item.color, display: 'inline-block', boxShadow: `0 0 6px ${item.color}` }} />
-                {item.label}
-              </div>
-            ))}
-          </div>
+
         </section>
 
         {/* About Section with Photo */}
