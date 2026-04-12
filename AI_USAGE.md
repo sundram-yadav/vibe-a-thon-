@@ -81,13 +81,13 @@
 
 | Area | AI % |
 |---|---|
-| Component architecture | 90% |
-| 3D scene (Three.js) | 95% |
+| Component architecture | 70% |
+| 3D scene (Three.js) | 90% |
 | SVG shapes & animations | 85% |
 | CSS animations & keyframes | 80% |
 | Data/content (my life story) | 0% (100% me) |
-| Concept & creative direction | 40% (collaborated) |
-| Color/font choices | 30% (AI suggested, I chose) |
+| Concept & creative direction | 20% (collaborated) |
+| Color/font choices | 10% (AI suggested, I chose) |
 
 ---
 
