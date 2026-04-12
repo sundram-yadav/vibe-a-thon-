@@ -16,21 +16,21 @@ const formulas = [
 
 function ChemistryBackground() {
   const items = useMemo(() => {
-    // 150 floating formulas acting as a deep background watermark
+    // 150 floating formulas acting as a very subtle deep background watermark
     return Array.from({ length: 150 }).map((_, i) => ({
       text: formulas[i % formulas.length],
       position: [
-        (Math.random() - 0.5) * 100, // Wide spread X
-        (Math.random() - 0.2) * 60,  // Wide spread Y (mostly up)
-        -15 - Math.random() * 30     // Deep back Z
+        (Math.random() - 0.5) * 120, // Wider spread X
+        (Math.random() - 0.3) * 80,  // Wider spread Y 
+        -30 - Math.random() * 40     // Deep pushed back Z to not interfere with units
       ] as [number, number, number],
       rotation: [
         0,
         0,
-        (Math.random() - 0.5) * 0.3
+        (Math.random() - 0.5) * 0.2
       ] as [number, number, number],
-      scale: 0.5 + Math.random() * 1.5,
-      opacity: 0.02 + Math.random() * 0.06 // Very faint like a watermark
+      scale: 1.0 + Math.random() * 2.0, // Made them larger
+      opacity: 0.01 + Math.random() * 0.03 // Extremely faint opacity for watermark vibe
     }));
   }, []);
 
@@ -50,7 +50,7 @@ function ChemistryBackground() {
           position={item.position}
           rotation={item.rotation}
           fontSize={item.scale}
-          color="#FF6B00"
+          color="#52321c" // Dark brownish-orange for subtle UI watermark look
           fillOpacity={item.opacity}
           anchorX="center"
           anchorY="middle"
@@ -92,12 +92,12 @@ function BackgroundParticles() {
 
 // ─── Pipe Connections with Reaction Text ──────────────────────────────────────
 const reactions = [
-  'Heat Addition ΔH > 0', 
-  'Catalytic Cracking', 
-  'Polymerization: nA → [A]n', 
-  'Separation & Reflux', 
-  'Exothermic Yield ΔT +', 
-  'Final Distillation'
+  '"Pressure Creates Diamonds"', 
+  '"Refining the Variables"', 
+  '"Iterating over Failures"', 
+  '"Catalyzing Ambitions"', 
+  '"Extracting Pure Signal"', 
+  '"Scaling the Operation"'
 ];
 
 function PipeConnections({ units }: { units: PlantUnit[] }) {
