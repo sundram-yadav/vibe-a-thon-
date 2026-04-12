@@ -49,13 +49,13 @@ export const plantUnits: PlantUnit[] = [
     pressure: '1 atm',
     yield: 'Discipline: ∞',
     achievements: [
-      'Joined NCC (National Cadet Corps)',
-      'Navodaya Vidyalaya — Class 8 completed',
+      'Joined NCC (National Cadet Corps) in Class 8',
+      'Navodaya Vidyalaya — Academic foundation',
       'Began 2-year journey toward A Certificate',
       'Developed discipline, teamwork & leadership',
       'Drills, camps, national integration activities',
     ],
-    description: 'Every great reaction needs a catalyst. NCC was mine — and Navodaya built my foundation. Marching in formation taught me that excellence is a habit, not an event.',
+    description: 'Every great reaction needs a catalyst. NCC was mine in Class 8 — and Navodaya built my foundation. Marching in formation taught me that excellence is a habit, not an event.',
   },
   {
     id: 'class10',

@@ -2,7 +2,7 @@
 
 import { useRef, useState, Suspense, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Text, Float, OrbitControls, MeshDistortMaterial, Sphere, Cylinder, Box, Grid, Torus, Html } from '@react-three/drei';
+import { Text, Float, OrbitControls, MeshDistortMaterial, Sphere, Cylinder, Box, Grid, Torus, Html, Billboard } from '@react-three/drei';
 import * as THREE from 'three';
 import { PlantUnit } from './plantData';
 
@@ -132,18 +132,18 @@ function PipeConnections({ units }: { units: PlantUnit[] }) {
               <tubeGeometry args={[curve, 20, 0.04, 8, false]} />
               <meshStandardMaterial color={unit.color} transparent opacity={0.6} metalness={0.8} roughness={0.2} />
             </mesh>
-            {/* Reaction Process Text hovering over the pipe */}
-            <Float speed={2} rotationIntensity={0.1} floatIntensity={0.2}>
+            {/* Reaction Process Text - Billboarded for 360-degree visibility */}
+            <Billboard position={[(x1 + x2) / 2, -1.8, (z1 + z2) / 2 + 0.5]}>
               <Text 
-                position={[(x1 + x2) / 2, -1.8, (z1 + z2) / 2 + 0.5]} 
                 fontSize={0.2} 
                 color="rgba(255,255,255,0.7)"
                 anchorX="center"
                 anchorY="middle"
+                font="/fonts/SpaceMono-Regular.ttf"
               >
                 {reactions[i % reactions.length]}
               </Text>
-            </Float>
+            </Billboard>
           </group>
         );
       })}
