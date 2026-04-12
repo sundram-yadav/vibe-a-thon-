@@ -142,24 +142,6 @@ function IndustrialEquipment({ unit, color }: { unit: PlantUnit, color: string }
   const commonMat = <meshStandardMaterial color={unit.color} metalness={0.6} roughness={0.1} />;
   const steelMat = <meshStandardMaterial color="#9333EA" metalness={0.9} roughness={0.1} />;
   
-  // Connects the vessel body to the 4 purple pillars
-  const SupportBrackets = () => (
-    <group>
-      {[0, 1, 2, 3].map((i) => {
-        const angle = (i * Math.PI) / 2 + Math.PI / 4;
-        // Distance from center to pillar is approx 1.06 (diagonal of 0.75, 0.75).
-        // Vessel radius is 0.6 * scaled down.
-        return (
-          <mesh key={i} position={[0, -0.2, 0]} rotation={[0, -angle, 0]}>
-            <boxGeometry args={[1.1, 0.08, 0.08]} />
-            <meshStandardMaterial color="#9333EA" metalness={0.9} roughness={0.05} />
-            <Edges color="#fff" />
-          </mesh>
-        );
-      })}
-    </group>
-  );
-
   // Connects the vessel body to the 4 purple pillars (Scaling compensated)
   const SupportBrackets = ({ scale }: { scale: number }) => (
     <group scale={1/scale}> 
