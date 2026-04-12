@@ -166,8 +166,8 @@ function ReactorVessel({
   isHovered: boolean;
   onHover: (h: boolean) => void;
 }) {
-  const meshRef = useRef<THREE.Mesh>(null!);
-  const glowRef = useRef<THREE.Mesh>(null!);
+  const meshRef = useRef<any>(null!);
+  const glowRef = useRef<any>(null!);
   
   // Arrange in a wide semi-circle
   const angle = (index / (total - 1)) * Math.PI * 1.5 - Math.PI * 0.75;
