@@ -342,12 +342,17 @@ function ReactorVessel({
         {isHovered && (
           <Html position={[0, 1, 0]} center>
             <div style={{
-              background: 'rgba(0,0,0,0.9)', border: `1px solid ${unit.color}`, padding: '4px 12px',
-              borderRadius: '20px', color: '#fff', fontSize: '12px', whiteSpace: 'nowrap',
-              boxShadow: `0 0 10px ${unit.color}`, pointerEvents: 'none',
-              fontFamily: 'monospace', textTransform: 'uppercase'
+              background: 'rgba(0,0,0,0.9)', border: `1px solid ${unit.color}`, padding: '8px 16px',
+              borderRadius: '12px', color: '#fff', fontSize: '14px', whiteSpace: 'nowrap',
+              boxShadow: `0 0 20px ${unit.color}`, pointerEvents: 'none',
+              fontFamily: 'monospace', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '4px'
             }}>
-              ◉ Inspect Unit
+              <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                ◉ Inspect Unit
+              </span>
+              <span style={{ color: unit.color, fontWeight: 'bold' }}>
+                {unit.subtitle.split(' — ')[0]}
+              </span>
             </div>
           </Html>
         )}

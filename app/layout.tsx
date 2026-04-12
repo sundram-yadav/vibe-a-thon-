@@ -7,6 +7,8 @@ export const metadata: Metadata = {
   keywords: ['Sundram Yadav', 'IIT Dharwad', 'Chemical Engineering', 'Portfolio', 'Ayodhya'],
 }
 
+import CustomCursor from './components/CustomCursor'
+
 export default function RootLayout({
   children,
 }: {
@@ -20,7 +22,10 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Special+Elite&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
-      <body>{children}</body>
+      <body>
+        <CustomCursor />
+        {children}
+      </body>
     </html>
   )
 }

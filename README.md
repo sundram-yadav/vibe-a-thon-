@@ -1,106 +1,32 @@
-# 🏭 Sundram Yadav — The Living Plant
+# Vibe-a-thon Submission 🚀
+## Sundram Yadav - A Chemical Plant Portfolio
 
-> *My life is a chemical plant. Every milestone is a processing unit. Every struggle is a reaction.*
+This is a gamified, highly interactive 3D Web Experience representing my life and academic progression as a continuous chemical plant process. 
 
-**[Vibe-a-thon 2025 | The Coding Club | IIT Dharwad]**
+### 🏆 Required Hackathon Components Integrated
+To satisfy the Vibe-a-thon requirements, I explicitly replicated the "vibe" and essence of 4 crucial animated UI components from the provided Drive folder:
 
----
+1. **The 3D Scene Interactive Component (`3js component.webm`)**
+   - **How it's used:** The entirely custom-built **Chemical Metaverse** built with React Three Fiber. Free drag/rotate controls, 3D reactive glow pipelines, and interactive `OrbitControls`.
+2. **Scroll Translation Component (`Home-Transition.mp4` & `home page scroll.mp4`)**
+   - **How it's used:** As you scroll down the homepage, horizontal lines animate smoothly and the visual flow diagrams scale in, converting static text into a story.
+3. **Hover Effects Component (`hover buttons - 2.mp4` & `hover effect carousel.mp4`)**
+   - **How it's used:** Both 3D vessels and 2D project cards feature multi-layered glow hovers. Hovering a 3D unit makes it pulse and scale up dynamically!
+4. **Animated Custom Cursor Indicator (Cursor Vibe)**
+   - **How it's used:** Floating dynamic reactive orbital cursor that tracks the mouse and seamlessly scales and glows whenever hovering over actionable logic items.
 
-## 🎯 Concept
+### 🛠 Tech Stack
+- Next.js 14 (App Router)
+- React Three Fiber / Drei (Custom WebGL Rendering)
+- Tailwind CSS (For layout scaffolding)
+- Vanilla Framer-style transitions custom-built via CSS
 
-A cinematic, fully interactive portfolio where **my life is visualized as a chemical plant**. Each major milestone (school, NCC, JEE, IIT, hackathons) becomes a **processing unit** — reactors, distillation towers, separators, heat exchangers. The connections between them are **reaction equations** with motivational quotes.
+### 🧭 Navigation Guide
+1. Start at the top to read the core philosophy.
+2. Scroll to the **2D Process Diagram** and click through the nodes.
+3. Scroll further to open the **3D View Module** — drag to rotate, scroll to zoom, and interact with the vessels.
+4. Click on any Vessel to reveal an animated Modal describing projects logically tied to that life phase.
 
-The entire journey from **Class 8 NCC induction in Ayodhya → IIT Dharwad Semester 2 hackathons** is mapped as a live Process Flow Diagram.
+> **AI Usage Disclaimer Document:** My extensive prompt history and system chats generating 3js scenes and dealing with CSS hydration mismatches are archived separately as per the submission guide.
 
----
-
-## 🚀 Getting Started
-
-```bash
-cd vibe-portfolio
-npm install
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
----
-
-## 🧪 Components Replicated (from Drive)
-
-| Drive Component | Replicated As | Where |
-|---|---|---|
-| **Home page scroll / Homepage** | Cinematic intro screen + scroll-triggered reveals | `IntroScreen.tsx`, `PlantPortfolio.tsx` |
-| **Hover buttons** | Unit cards with 3D hover lift + glow effect | `.unit-card` CSS + `PlantSVG.tsx` |
-| **Loader** | Animated plant steam particles + pulsing live indicator | `FloatingParticles.tsx`, `PlantSVG.tsx` |
-| **Toggle / Carousel** | Click-to-reveal modal with staggered achievement animations | `UnitModal.tsx` |
-| **Ripple / Peak animation** | Animated SVG pipe flow with moving dash-offset | `PlantSVG.tsx` |
-| **Parallax animation** | CSS grid background + floating saffron particles | `globals.css`, `FloatingParticles.tsx` |
-| **Scroll and pop up** | Achievement items animate in with slide+fade on modal open | `UnitModal.tsx` |
-
----
-
-## 🏗️ Plant Units (My Life Milestones)
-
-1. **Pre-Reaction Vessel** — Class 8, NCC Induction (~2019)
-2. **Separation Column A** — Class 10, St. Xavier's 91%, NCC A Certificate (2021)
-3. **High-Pressure Reactor** — Class 12, JEE Prep, Board 90% (2023)
-4. **Feed Stream** — IIT Dharwad Admission, Chemical & Biochemical Engineering (2023)
-5. **Distillation Tower α** — Semester 1, CGPA 8+, SleeplessCodingSaga 3.0 Rank 1 (2023–24)
-6. **Multi-Effect Evaporator β** — Semester 2, NSS + 6 Hackathons + Coding Club (2024–25)
-
----
-
-## ⚗️ Reaction Equations (Between Units)
-
-```
-Discipline + Time → A Certificate + 91%
-Curiosity + JEE Motivation → ΔH = -∞ (Exothermic)
-Effort² + Ayodhya Pride → IIT Rank
-New Environment + Hunger → CGPA 8+ + Rank 1
-1st Win + Confidence → ∑(Hackathons) → Growth
-```
-
----
-
-## 🛠️ Tech Stack
-
-- **Next.js 14** (App Router)
-- **TypeScript**
-- **Tailwind CSS**
-- **SVG animations** (custom, no library)
-- **CSS keyframe animations** (particles, scanlines, steam, flow)
-- **Google Fonts**: Caveat (chalkboard), Special Elite (display), Share Tech Mono
-
----
-
-## 🎨 Design Decisions
-
-- **Saffron (#FF6B00)** — From Ayodhya, my roots
-- **Dark industrial background** — Chemical plant aesthetic
-- **Chalkboard fonts** — Engineering notebook vibes
-- **Isometric SVG plant diagram** — The centerpiece
-- **Cinematic intro** — Establishes the narrative before anything is clickable
-
----
-
-## 🤖 AI Usage
-
-See `AI_USAGE.md` for full prompt log.
-
-Key AI contributions:
-- Architecture brainstorming: "Life as a chemical plant" concept refinement
-- SVG unit shape generation for each equipment type
-- CSS animation keyframes for steam, flow, particles
-- Chalkboard equation styling
-- Modal stagger animation timing
-
----
-
-## 👤 About Me
-
-**Sundram Yadav** | Chemical & Biochemical Engineering | IIT Dharwad | Batch 2023  
-From **Ayodhya, Uttar Pradesh** 🕌  
-GitHub: [@sundram-yadav](https://github.com/sundram-yadav)
-
-*"The plant is still running. Yield: improving."*
+*Less typing. Prompt more. Center the div on the first try.*
