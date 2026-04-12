@@ -209,7 +209,9 @@ function IndustrialEquipment({ unit, color }: { unit: PlantUnit, color: string }
              <mesh position={[-0.5, 0, 0]}><boxGeometry args={[0.2, 0.6, 0.6]} />{steelMat}<Edges color="#fff" /></mesh>
           </group>
           <group position={[0, -0.7, 0]}><SupportBrackets scale={0.8} /></group>
-          <VerticalNozzle />
+          {/* Dual Nozzles for Inlet/Outlet */}
+          <group position={[0.5, 0, 0]}><VerticalNozzle /></group>
+          <group position={[-0.5, 0, 0]}><VerticalNozzle /></group>
         </group>
       );
     case 'compressor':
@@ -226,7 +228,6 @@ function IndustrialEquipment({ unit, color }: { unit: PlantUnit, color: string }
       return (
         <group scale={0.7}>
           <mesh rotation={[Math.PI/2, 0, 0]}><capsuleGeometry args={[0.4, 1.2, 16, 32]} />{commonMat}<Edges color="#fff" /></mesh>
-          <mesh position={[0.45, 0, 0]}><boxGeometry args={[0.1, 0.8, 0.05]} /><meshStandardMaterial color="#00ffff" emissive="#00ffff" emissiveIntensity={0.5} transparent opacity={0.6} /></mesh>
           <SupportBrackets scale={0.7} />
           <VerticalNozzle />
           <VesselLegs color={color} />
