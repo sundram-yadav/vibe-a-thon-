@@ -138,12 +138,13 @@ export const plantUnits: PlantUnit[] = [
     achievements: [
       'Aug 2025 – Dec 8, 2025 (Semester 1)',
       'CGPA: 8+ — Strong academic foundation',
+      'Joined NSO (Athletics) — Learned physical fitness tips and tricks',
       'SleeplessCodingSaga 3.0 — Team Leader',
       '1st Rank — Junior Category',
       'First hackathon, first podium, first taste of building',
       'Fell in love with coding under pressure',
     ],
-    description: 'Semester 1 was about proving I belonged. Led a team through SleeplessCodingSaga 3.0, stayed up all night, and came out #1 in the junior category. CGPA 8+. The distillation was working.',
+    description: 'Semester 1 was about proving I belonged. Led a team through SleeplessCodingSaga 3.0, stayed up all night, and came out #1 in the junior category. Explored robotics and built a foundation in physical fitness with NSO. CGPA 8+. The distillation was working.',
     projects: [
       {
         name: 'Indian Recipe Finder',
@@ -173,6 +174,19 @@ export const plantUnits: PlantUnit[] = [
         ],
         award: '1st Rank Junior Category — SleeplessCodingSaga 3.0',
       },
+      {
+        name: 'Robotic Arm — Buildathon',
+        emoji: '🦾',
+        tech: ['Arduino Uno', 'Arduino Nano', 'Servo Motors', 'Robotics Components'],
+        description: 'Participated in Buildathon under the Robotics Club to build a mechanical arm capable of real-world physical tasks.',
+        highlights: [
+          'Designed to uplift a Rubik\\'s cube to a height of 1 foot',
+          'Gained hands-on knowledge of microcontrollers (Uno, Nano)',
+          'Worked extensively with different types of servo motors',
+          'Learned integration of hardware components and core robotics principles',
+        ],
+        role: 'Robotics Club Buildathon Participant',
+      },
     ],
   },
   {
@@ -190,7 +204,9 @@ export const plantUnits: PlantUnit[] = [
     yield: 'CGPA: 8+, 6+ Events',
     achievements: [
       'Jan 5, 2026 – Present (Semester 2)',
-      'NSS — National Service Scheme (joined)',
+      'NSS — National Service Scheme (joined in 2nd sem)',
+      'Joined Quiz Club — Content Creation Team',
+      'Researching and refining interesting facts for official IIT Dharwad Quiz Club Instagram',
       'Nasiko AI Hackathon — HARI built',
       'Parsec @ IIT Dharwad: Singularity Hackathon',
       'Parsec @ IIT Dharwad: DevHack',
@@ -200,7 +216,7 @@ export const plantUnits: PlantUnit[] = [
       'Building: Institute Wellness App + Election Website',
       'Vibe-a-thon 2026 — This very moment',
     ],
-    description: 'Semester 2 is where the plant went multi-effect. AI hackathons, cybersecurity, DSA treasure hunts, NSS, and now building the very portfolio you\'re looking at. The reactions are still happening — April 2026.',
+    description: 'Semester 2 is where the plant went multi-effect. AI hackathons, cybersecurity, Quiz Club content creation, NSS, and building the very portfolio you\'re looking at. The reactions are still happening — April 2026.',
     projects: [
       {
         name: 'AcadMitra — Academic Command Center',
