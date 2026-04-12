@@ -141,6 +141,24 @@ function VesselLegs({ color }: { color: string }) {
 function IndustrialEquipment({ unit, color }: { unit: PlantUnit, color: string }) {
   const commonMat = <meshStandardMaterial color={unit.color} metalness={0.6} roughness={0.1} />;
   const steelMat = <meshStandardMaterial color="#9333EA" metalness={0.9} roughness={0.1} />;
+  
+  // Connects the vessel body to the 4 purple pillars
+  const SupportBrackets = () => (
+    <group>
+      {[0, 1, 2, 3].map((i) => {
+        const angle = (i * Math.PI) / 2 + Math.PI / 4;
+        // Distance from center to pillar is approx 1.06 (diagonal of 0.75, 0.75).
+        // Vessel radius is 0.6 * scaled down.
+        return (
+          <mesh key={i} position={[0, -0.2, 0]} rotation={[0, -angle, 0]}>
+            <boxGeometry args={[1.1, 0.08, 0.08]} />
+            <meshStandardMaterial color="#9333EA" metalness={0.9} roughness={0.05} />
+            <Edges color="#fff" />
+          </mesh>
+        );
+      })}
+    </group>
+  );
 
   switch (unit.type) {
     case 'reactor':
@@ -153,6 +171,7 @@ function IndustrialEquipment({ unit, color }: { unit: PlantUnit, color: string }
             <mesh position={[0, 0.2, 0]}><boxGeometry args={[0.3, 0.4, 0.3]} />{steelMat}<Edges color={color} /></mesh>
             <mesh position={[0.2, 0, 0]} rotation={[0, 0, Math.PI/2]}><cylinderGeometry args={[0.05, 0.05, 0.4, 8]} />{steelMat}</mesh>
           </group>
+          <SupportBrackets />
           <VesselLegs color={color} />
         </group>
       );
@@ -165,16 +184,24 @@ function IndustrialEquipment({ unit, color }: { unit: PlantUnit, color: string }
               <torusGeometry args={[0.42, 0.03, 8, 32]} />{steelMat}
             </mesh>
           ))}
+          <group position={[0, 0.5, 0]}><SupportBrackets /></group>
           <VesselLegs color={color} />
         </group>
       );
     case 'exchanger':
       return (
-        <group rotation={[0, 0, Math.PI / 2]} scale={0.8}>
-          <mesh><cylinderGeometry args={[0.5, 0.5, 1.8, 32]} />{commonMat}<Edges color="#fff" /></mesh>
-          <mesh position={[0, 0.9, 0]} rotation={[Math.PI/2, 0, 0]}><torusGeometry args={[0.55, 0.08, 12, 32]} />{steelMat}<Edges color="#fff" /></mesh>
-          <mesh position={[0, -0.9, 0]} rotation={[Math.PI/2, 0, 0]}><torusGeometry args={[0.55, 0.08, 12, 32]} />{steelMat}<Edges color="#fff" /></mesh>
-          <mesh position={[0.3, 0.5, 0]} rotation={[0, 0, -Math.PI/2]}><cylinderGeometry args={[0.1, 0.1, 0.4, 16]} />{steelMat}</mesh>
+        <group scale={0.8}>
+          <group rotation={[0, 0, Math.PI / 2]}>
+            <mesh><cylinderGeometry args={[0.5, 0.5, 1.8, 32]} />{commonMat}<Edges color="#fff" /></mesh>
+            <mesh position={[0, 0.9, 0]} rotation={[Math.PI/2, 0, 0]}><torusGeometry args={[0.55, 0.08, 12, 32]} />{steelMat}<Edges color="#fff" /></mesh>
+            <mesh position={[0, -0.9, 0]} rotation={[Math.PI/2, 0, 0]}><torusGeometry args={[0.55, 0.08, 12, 32]} />{steelMat}<Edges color="#fff" /></mesh>
+          </group>
+          {/* Cradles connecting to support structure */}
+          <group position={[0, -0.5, 0]}>
+             <mesh position={[0.5, 0, 0]}><boxGeometry args={[0.2, 0.6, 0.6]} />{steelMat}<Edges color="#fff" /></mesh>
+             <mesh position={[-0.5, 0, 0]}><boxGeometry args={[0.2, 0.6, 0.6]} />{steelMat}<Edges color="#fff" /></mesh>
+          </group>
+          <group position={[0, -0.7, 0]}><SupportBrackets /></group>
         </group>
       );
     case 'compressor':
@@ -182,6 +209,7 @@ function IndustrialEquipment({ unit, color }: { unit: PlantUnit, color: string }
         <group scale={0.7}>
           <mesh><octahedronGeometry args={[0.8, 0]} /><meshStandardMaterial color={color} metalness={0.9} roughness={0.1} wireframe /></mesh>
           <mesh><octahedronGeometry args={[0.6, 0]} />{commonMat}<Edges color="#fff" /></mesh>
+          <SupportBrackets />
           <VesselLegs color={color} />
         </group>
       );
@@ -190,6 +218,7 @@ function IndustrialEquipment({ unit, color }: { unit: PlantUnit, color: string }
         <group scale={0.7}>
           <mesh rotation={[Math.PI/2, 0, 0]}><capsuleGeometry args={[0.4, 1.2, 16, 32]} />{commonMat}<Edges color="#fff" /></mesh>
           <mesh position={[0.45, 0, 0]}><boxGeometry args={[0.1, 0.8, 0.05]} /><meshStandardMaterial color="#00ffff" emissive="#00ffff" emissiveIntensity={0.5} transparent opacity={0.6} /></mesh>
+          <SupportBrackets />
           <VesselLegs color={color} />
         </group>
       );
@@ -198,6 +227,7 @@ function IndustrialEquipment({ unit, color }: { unit: PlantUnit, color: string }
         <group scale={0.7}>
           <mesh><cylinderGeometry args={[0.7, 0.7, 1.5, 32]} />{commonMat}<Edges color="#fff" /></mesh>
           <mesh position={[0, 0.75, 0]}><cylinderGeometry args={[0.7, 0.7, 0.1, 32]} />{steelMat}<Edges color="#fff" /></mesh>
+          <SupportBrackets />
           <VesselLegs color={color} />
         </group>
       );
