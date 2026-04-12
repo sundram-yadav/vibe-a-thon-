@@ -129,8 +129,8 @@ function VesselLegs({ color }: { color: string }) {
         return (
           <mesh key={i} position={[Math.cos(angle) * 0.4, -0.5, Math.sin(angle) * 0.4]}>
             <cylinderGeometry args={[0.04, 0.06, 1, 8]} />
-            <meshStandardMaterial color="#888" metalness={0.9} roughness={0.1} />
-            <Edges color={color} />
+            <meshStandardMaterial color="#A855F7" metalness={0.9} roughness={0.1} />
+            <Edges color="#fff" />
           </mesh>
         );
       })}
@@ -140,7 +140,7 @@ function VesselLegs({ color }: { color: string }) {
 
 function IndustrialEquipment({ unit, color }: { unit: PlantUnit, color: string }) {
   const commonMat = <meshStandardMaterial color={unit.color} metalness={0.6} roughness={0.1} />;
-  const steelMat = <meshStandardMaterial color="#999" metalness={0.9} roughness={0.1} />;
+  const steelMat = <meshStandardMaterial color="#9333EA" metalness={0.9} roughness={0.1} />;
 
   switch (unit.type) {
     case 'reactor':
@@ -207,23 +207,34 @@ function IndustrialEquipment({ unit, color }: { unit: PlantUnit, color: string }
 function Scaffolding({ position, color }: { position: [number, number, number], color: string }) {
   return (
     <group position={position}>
-      {/* Heavy Steel Base Plate */}
+      {/* Heavy Purple Base Plate */}
       <mesh position={[0, -1.8, 0]}>
         <boxGeometry args={[1.8, 0.15, 1.8]} />
-        <meshStandardMaterial color="#777" metalness={0.9} roughness={0.2} />
-        <Edges color={color} />
+        <meshStandardMaterial color="#9333EA" metalness={1} roughness={0.1} />
+        <Edges color="#fff" />
       </mesh>
-      {/* Support Rails */}
-      <mesh position={[0.85, -1, 0.85]}>
-        <boxGeometry args={[0.06, 1.6, 0.06]} />
-        <meshStandardMaterial color="#888" metalness={0.8} roughness={0.1} />
-        <Edges color={color} />
-      </mesh>
-      <mesh position={[-0.85, -1, -0.85]}>
-        <boxGeometry args={[0.06, 1.6, 0.06]} />
-        <meshStandardMaterial color="#888" metalness={0.8} roughness={0.1} />
-        <Edges color={color} />
-      </mesh>
+      {/* Structural Support Legs reaching the Grid Floor (-2.5 total) */}
+      {[0, 1, 2, 3].map((i) => {
+        const offset = 0.75;
+        const x = i === 0 || i === 1 ? offset : -offset;
+        const z = i === 0 || i === 3 ? offset : -offset;
+        return (
+          <group key={i}>
+            {/* Top rails supporting the unit scaffold */}
+            <mesh position={[x, -0.9, z]}>
+              <boxGeometry args={[0.08, 1.8, 0.08]} />
+              <meshStandardMaterial color="#A855F7" metalness={0.8} roughness={0.1} />
+              <Edges color="#fff" />
+            </mesh>
+            {/* Bottom pillars connecting plate to floor grid */}
+            <mesh position={[x, -2.4, z]}>
+              <cylinderGeometry args={[0.08, 0.08, 1.25, 8]} />
+              <meshStandardMaterial color="#7E22CE" metalness={1} roughness={0.05} />
+              <Edges color="#fff" />
+            </mesh>
+          </group>
+        );
+      })}
     </group>
   );
 }
