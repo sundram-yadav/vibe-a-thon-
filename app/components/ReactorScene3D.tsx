@@ -129,7 +129,7 @@ function VesselLegs({ color }: { color: string }) {
         return (
           <mesh key={i} position={[Math.cos(angle) * 0.4, -0.5, Math.sin(angle) * 0.4]}>
             <cylinderGeometry args={[0.04, 0.06, 1, 8]} />
-            <meshStandardMaterial color="#333" metalness={0.8} roughness={0.2} />
+            <meshStandardMaterial color="#888" metalness={0.9} roughness={0.1} />
             <Edges color={color} />
           </mesh>
         );
@@ -140,7 +140,7 @@ function VesselLegs({ color }: { color: string }) {
 
 function IndustrialEquipment({ unit, color }: { unit: PlantUnit, color: string }) {
   const commonMat = <meshStandardMaterial color={unit.color} metalness={0.6} roughness={0.1} />;
-  const steelMat = <meshStandardMaterial color="#444" metalness={0.9} roughness={0.1} />;
+  const steelMat = <meshStandardMaterial color="#999" metalness={0.9} roughness={0.1} />;
 
   switch (unit.type) {
     case 'reactor':
@@ -207,9 +207,23 @@ function IndustrialEquipment({ unit, color }: { unit: PlantUnit, color: string }
 function Scaffolding({ position, color }: { position: [number, number, number], color: string }) {
   return (
     <group position={position}>
-      <mesh position={[0, -1.8, 0]}><boxGeometry args={[1.8, 0.15, 1.8]} /><meshStandardMaterial color="#1a1a24" metalness={0.9} roughness={0.4} /><Edges color={color} /></mesh>
-      <mesh position={[0.85, -1, 0.85]}><boxGeometry args={[0.06, 1.6, 0.06]} /><meshStandardMaterial color="#444" metalness={0.5} opacity={0.6} transparent /></mesh>
-      <mesh position={[-0.85, -1, -0.85]}><boxGeometry args={[0.06, 1.6, 0.06]} /><meshStandardMaterial color="#444" metalness={0.5} opacity={0.6} transparent /></mesh>
+      {/* Heavy Steel Base Plate */}
+      <mesh position={[0, -1.8, 0]}>
+        <boxGeometry args={[1.8, 0.15, 1.8]} />
+        <meshStandardMaterial color="#777" metalness={0.9} roughness={0.2} />
+        <Edges color={color} />
+      </mesh>
+      {/* Support Rails */}
+      <mesh position={[0.85, -1, 0.85]}>
+        <boxGeometry args={[0.06, 1.6, 0.06]} />
+        <meshStandardMaterial color="#888" metalness={0.8} roughness={0.1} />
+        <Edges color={color} />
+      </mesh>
+      <mesh position={[-0.85, -1, -0.85]}>
+        <boxGeometry args={[0.06, 1.6, 0.06]} />
+        <meshStandardMaterial color="#888" metalness={0.8} roughness={0.1} />
+        <Edges color={color} />
+      </mesh>
     </group>
   );
 }
