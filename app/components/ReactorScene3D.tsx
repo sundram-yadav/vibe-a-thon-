@@ -1,33 +1,36 @@
 'use client';
 
-import { useRef, useState, useEffect, Suspense, useMemo } from 'react';
+import { useRef, useState, Suspense, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Text, Float, OrbitControls, MeshDistortMaterial, Sphere, Cylinder, Box, Grid } from '@react-three/drei';
+import { Text, OrbitControls, MeshDistortMaterial, Sphere, Cylinder, Box, Grid, Torus, Html } from '@react-three/drei';
 import * as THREE from 'three';
 import { PlantUnit } from './plantData';
 
-// ─── Floating Formulas Background ──────────────────────────────────────────────
+// ─── Floating Formulas Background (Watermark Density) ─────────────────────────
 const formulas = [
   'ΔS ≥ 0', 'k = A·e^(-Ea/RT)', 'PV = nRT', 'ΔG = ΔH - TΔS', 
   '[-CH2-CH2-]n', '[-NH-R-CO-]n', '∂ρ/∂t + ∇·(ρv) = 0', 'HΨ = EΨ',
-  'Re = ρvD/μ', 'd[A]/dt = -k[A]', 'Sp. Volume', 'Polymerization'
+  'Re = ρvD/μ', 'd[A]/dt = -k[A]', 'Sp. Volume', 'Polymerization',
+  'CSTR', 'PFR', 'Nusselt', 'Prandtl', 'Gibbs Free Energy'
 ];
 
 function ChemistryBackground() {
   const items = useMemo(() => {
-    return Array.from({ length: 30 }).map((_, i) => ({
+    // 150 floating formulas acting as a deep background watermark
+    return Array.from({ length: 150 }).map((_, i) => ({
       text: formulas[i % formulas.length],
       position: [
-        (Math.random() - 0.5) * 25,
-        (Math.random() - 0.5) * 15,
-        (Math.random() - 0.5) * 20 - 5
+        (Math.random() - 0.5) * 100, // Wide spread X
+        (Math.random() - 0.2) * 60,  // Wide spread Y (mostly up)
+        -15 - Math.random() * 30     // Deep back Z
       ] as [number, number, number],
       rotation: [
-        Math.random() * 0.2,
-        Math.random() * Math.PI,
-        Math.random() * 0.2
+        0,
+        0,
+        (Math.random() - 0.5) * 0.3
       ] as [number, number, number],
-      scale: 0.15 + Math.random() * 0.2
+      scale: 0.5 + Math.random() * 1.5,
+      opacity: 0.02 + Math.random() * 0.06 // Very faint like a watermark
     }));
   }, []);
 
@@ -35,8 +38,7 @@ function ChemistryBackground() {
 
   useFrame((state) => {
     if (groupRef.current) {
-      groupRef.current.rotation.y = state.clock.elapsedTime * 0.01;
-      groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.2) * 0.5;
+      groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.1) * 2; // slow breathing
     }
   });
 
@@ -48,8 +50,8 @@ function ChemistryBackground() {
           position={item.position}
           rotation={item.rotation}
           fontSize={item.scale}
-          color="rgba(255, 107, 0, 0.15)"
-          material-transparent
+          color="#FF6B00"
+          fillOpacity={item.opacity}
           anchorX="center"
           anchorY="middle"
         >
@@ -88,10 +90,19 @@ function BackgroundParticles() {
   );
 }
 
-// ─── Pipe Connections ────────────────────────────────────────────────────────
+// ─── Pipe Connections with Reaction Text ──────────────────────────────────────
+const reactions = [
+  'Heat Addition ΔH > 0', 
+  'Catalytic Cracking', 
+  'Polymerization: nA → [A]n', 
+  'Separation & Reflux', 
+  'Exothermic Yield ΔT +', 
+  'Final Distillation'
+];
+
 function PipeConnections({ units }: { units: PlantUnit[] }) {
   const total = units.length;
-  // Complex industrial manifold look using 3D tubes
+  // Complex industrial manifold look using 3D tubes + Reaction Labels
   return (
     <group>
       {units.slice(0, -1).map((unit, i) => {
@@ -116,10 +127,24 @@ function PipeConnections({ units }: { units: PlantUnit[] }) {
         ]);
 
         return (
-          <mesh key={i}>
-            <tubeGeometry args={[curve, 20, 0.04, 8, false]} />
-            <meshStandardMaterial color={unit.color} transparent opacity={0.6} metalness={0.8} roughness={0.2} />
-          </mesh>
+          <group key={i}>
+            <mesh>
+              <tubeGeometry args={[curve, 20, 0.04, 8, false]} />
+              <meshStandardMaterial color={unit.color} transparent opacity={0.6} metalness={0.8} roughness={0.2} />
+            </mesh>
+            {/* Reaction Process Text hovering over the pipe */}
+            <Float speed={2} rotationIntensity={0.1} floatIntensity={0.2}>
+              <Text 
+                position={[(x1 + x2) / 2, -1.8, (z1 + z2) / 2 + 0.5]} 
+                fontSize={0.2} 
+                color="rgba(255,255,255,0.7)"
+                anchorX="center"
+                anchorY="middle"
+              >
+                {reactions[i % reactions.length]}
+              </Text>
+            </Float>
+          </group>
         );
       })}
     </group>
@@ -128,7 +153,6 @@ function PipeConnections({ units }: { units: PlantUnit[] }) {
 
 // ─── Scaffolding / Foundation ─────────────────────────────────────────────────
 function Scaffolding({ position, color }: { position: [number, number, number], color: string }) {
-  // Adds industrial beams around the base of each vessel
   return (
     <group position={position}>
       <Box args={[1.5, 0.1, 1.5]} position={[0, -1.8, 0]}>
@@ -182,31 +206,46 @@ function ReactorVessel({
       meshRef.current.position.y = baseY + Math.sin(t * 0.7 + index * 1.2) * 0.1;
       meshRef.current.rotation.y = t * 0.2 + index;
       const target = isHovered ? 1.15 : 1.0;
-      meshRef.current.scale.lerp(new THREE.Vector3(target, target, target), 0.1);
+      meshRef.current.scale.lerp(new THREE.Vector3(target, target, target), 0.2);
     }
     if (glowRef.current) {
       glowRef.current.position.y = baseY + Math.sin(t * 0.7 + index * 1.2) * 0.1;
-      const gScale = isHovered ? 1.6 : 1.2;
-      glowRef.current.scale.lerp(new THREE.Vector3(gScale, gScale, gScale), 0.1);
+      const gScale = isHovered ? 1.8 : 1.2;
+      glowRef.current.scale.lerp(new THREE.Vector3(gScale, gScale, gScale), 0.2);
       (glowRef.current.material as THREE.MeshBasicMaterial).opacity =
-        isHovered ? 0.3 : 0.05 + Math.sin(t * 1.5 + index) * 0.03;
+        isHovered ? 0.4 : 0.05 + Math.sin(t * 1.5 + index) * 0.03;
     }
   });
 
   const getShape = () => {
     switch (unit.type) {
       case 'reactor':
+        // NEW High-Pressure Reactor Design (Ribbed and Industrial instead of basic cylinder)
         return (
           <group ref={meshRef} position={[baseX, baseY, baseZ]}>
-            <Cylinder args={[0.4, 0.45, 1.6, 32]}>
-              <MeshDistortMaterial color={unit.color} emissive={unit.color} emissiveIntensity={0.6} metalness={0.9} roughness={0.1} distort={0.03} speed={2} />
+            <Cylinder args={[0.5, 0.5, 1.8, 32]}>
+              <meshStandardMaterial color={unit.color} metalness={0.9} roughness={0.3} />
             </Cylinder>
-            <Sphere args={[0.4, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2]} position={[0, 0.8, 0]}>
-              <meshStandardMaterial color={unit.color} metalness={0.8} />
+            <Sphere args={[0.5, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2]} position={[0, 0.9, 0]}>
+              <meshStandardMaterial color={unit.color} metalness={0.9} roughness={0.3} />
             </Sphere>
-            <Sphere args={[0.45, 32, 16, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2]} position={[0, -0.8, 0]}>
-              <meshStandardMaterial color={unit.color} metalness={0.8} />
+            <Sphere args={[0.5, 32, 16, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2]} position={[0, -0.9, 0]}>
+              <meshStandardMaterial color={unit.color} metalness={0.9} roughness={0.3} />
             </Sphere>
+            {/* Pressure Rings */}
+            <Torus args={[0.52, 0.05, 16, 64]} position={[0, 0.5, 0]} rotation={[Math.PI/2, 0, 0]}>
+              <meshStandardMaterial color="#333" metalness={1} roughness={0.1} />
+            </Torus>
+            <Torus args={[0.52, 0.05, 16, 64]} position={[0, 0, 0]} rotation={[Math.PI/2, 0, 0]}>
+              <meshStandardMaterial color="#333" metalness={1} roughness={0.1} />
+            </Torus>
+            <Torus args={[0.52, 0.05, 16, 64]} position={[0, -0.5, 0]} rotation={[Math.PI/2, 0, 0]}>
+              <meshStandardMaterial color="#333" metalness={1} roughness={0.1} />
+            </Torus>
+            {/* Central glowing core inside */}
+            <Cylinder args={[0.4, 0.4, 1.5, 16]} position={[0, 0, 0]}>
+              <MeshDistortMaterial color={unit.glowColor || unit.color} emissive={unit.glowColor || unit.color} emissiveIntensity={0.5} distort={0.2} speed={3} />
+            </Cylinder>
           </group>
         );
       case 'tower':
@@ -229,20 +268,20 @@ function ReactorVessel({
             <MeshDistortMaterial color={unit.color} emissive={unit.color} emissiveIntensity={0.7} metalness={0.9} roughness={0.1} distort={0.1} speed={3} />
           </mesh>
         );
-      case 'exchanger': // A bundle of tubes look
+      case 'exchanger':
+        // Heat Exchanger Complex Tube Bundle
         return (
           <group ref={meshRef} position={[baseX, baseY, baseZ]}>
-            <mesh rotation={[Math.PI / 2, 0, 0]}>
-              <cylinderGeometry args={[0.4, 0.4, 1.2, 16]} />
-              <meshStandardMaterial color="#222" metalness={0.9} roughness={0.3} />
-            </mesh>
+            <Cylinder args={[0.4, 0.4, 1.2, 16]} rotation={[Math.PI / 2, 0, 0]}>
+              <meshStandardMaterial color="#222" metalness={0.9} roughness={0.4} />
+            </Cylinder>
             <mesh>
               <torusKnotGeometry args={[0.4, 0.08, 100, 16, 2, 5]} />
               <MeshDistortMaterial color={unit.color} emissive={unit.color} emissiveIntensity={0.8} metalness={1} distort={0.05} />
             </mesh>
           </group>
         );
-      default: // tank
+      default: // feed tank
         return (
           <mesh ref={meshRef} position={[baseX, baseY, baseZ]}>
             <cylinderGeometry args={[0.5, 0.5, 1.2, 32]} />
@@ -259,8 +298,8 @@ function ReactorVessel({
   return (
     <group
       onClick={(e) => { e.stopPropagation(); onClick(); }}
-      onPointerOver={() => onHover(true)}
-      onPointerOut={() => onHover(false)}
+      onPointerOver={() => { document.body.style.cursor = 'pointer'; onHover(true); }}
+      onPointerOut={() => { document.body.style.cursor = 'auto'; onHover(false); }}
     >
       <Scaffolding position={[baseX, baseY, baseZ]} color={unit.color} />
 
@@ -270,18 +309,48 @@ function ReactorVessel({
 
       {getShape()}
 
-      {/* Ground Label Stand */}
-      <group position={[baseX, -1.5, baseZ]}>
-        <mesh position={[0, -0.2, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-          <planeGeometry args={[1.8, 0.6]} />
-          <meshBasicMaterial color="rgba(0,0,0,0.8)" transparent opacity={0.8} />
+      {/* Prominent Label Highlights */}
+      <group position={[baseX, -1.2, baseZ]}>
+        {/* Base Plate */}
+        <mesh position={[0, -0.4, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[2.5, 0.8]} />
+          <meshBasicMaterial color={isHovered ? unit.color : "rgba(0,0,0,0.8)"} transparent opacity={isHovered ? 0.3 : 0.8} />
         </mesh>
-        <Text position={[0, -0.1, 0.01]} fontSize={0.15} color={isHovered ? '#fff' : unit.color} anchorX="center" anchorY="bottom">
+        
+        {/* Unit Name - Scales dramatically on Hover */}
+        <Text 
+          position={[0, -0.2, 0.01]} 
+          fontSize={isHovered ? 0.28 : 0.18} 
+          color={isHovered ? '#FFFFFF' : unit.color} 
+          anchorX="center" 
+          anchorY="bottom"
+          fontWeight={isHovered ? "bold" : "normal"}
+        >
           {unit.subtitle.split(' — ')[0]}
         </Text>
-        <Text position={[0, -0.3, 0.01]} fontSize={0.1} color="rgba(255,255,255,0.6)" anchorX="center" anchorY="bottom">
+        
+        <Text 
+          position={[0, -0.5, 0.01]} 
+          fontSize={0.12} 
+          color={isHovered ? '#FFF' : "rgba(255,255,255,0.6)"} 
+          anchorX="center" 
+          anchorY="bottom"
+        >
           {unit.period}
         </Text>
+
+        {isHovered && (
+          <Html position={[0, 1, 0]} center>
+            <div style={{
+              background: 'rgba(0,0,0,0.9)', border: `1px solid ${unit.color}`, padding: '4px 12px',
+              borderRadius: '20px', color: '#fff', fontSize: '12px', whiteSpace: 'nowrap',
+              boxShadow: `0 0 10px ${unit.color}`, pointerEvents: 'none',
+              fontFamily: 'monospace', textTransform: 'uppercase'
+            }}>
+              ◉ Inspect Unit
+            </div>
+          </Html>
+        )}
       </group>
     </group>
   );
@@ -307,12 +376,9 @@ export default function ReactorScene3D({ units, onUnitClick }: ReactorScene3DPro
         border: '1px solid rgba(255,107,0,0.2)',
         background: 'radial-gradient(ellipse at center, rgba(16,10,14,1) 0%, rgba(4,4,8,1) 100%)',
         boxShadow: '0 0 60px rgba(255,107,0,0.05) inset',
-        cursor: hoveredId ? 'pointer' : 'grab',
       }}
-      onMouseUp={(e) => { e.currentTarget.style.cursor = hoveredId ? 'pointer' : 'grab'; }}
-      onMouseDown={(e) => { e.currentTarget.style.cursor = 'grabbing'; }}
     >
-      <div style={{ position: 'absolute', top: 16, left: 16, zIndex: 10 }}>
+      <div style={{ position: 'absolute', top: 16, left: 16, zIndex: 10, pointerEvents: 'none' }}>
         <p className="font-mono text-xs tracking-widest" style={{ color: 'var(--saffron)' }}>
           ◈ FULL METAVERSE CONTROL MODE ◈
         </p>

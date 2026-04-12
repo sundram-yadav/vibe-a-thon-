@@ -218,7 +218,18 @@ export const plantUnits: PlantUnit[] = [
           'Focus Mode overlay with timer',
           'Faculty directory & collaboration tools',
         ],
-        award: 'Team CodeDevz',
+        award: 'Team CodeDevz — DevHack @ Parsec IIT Dharwad',
+      },
+      {
+        name: 'pRthivIkRmiH',
+        emoji: '🌍',
+        tech: ['Innovation', 'Web', 'Tech'],
+        description: 'Project developed under the Singularity Hackathon @ Parsec.',
+        highlights: [
+          'Visionary implementation addressing key problem statements',
+          'Collaborative team effort and rapid prototyping'
+        ],
+        award: 'Singularity Hackathon @ Parsec IIT Dharwad',
       },
       {
         name: 'HARI — HRFlow AI Agent',
