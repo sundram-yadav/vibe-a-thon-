@@ -160,6 +160,31 @@ function IndustrialEquipment({ unit, color }: { unit: PlantUnit, color: string }
     </group>
   );
 
+  // Connects the vessel body to the 4 purple pillars (Scaling compensated)
+  const SupportBrackets = ({ scale }: { scale: number }) => (
+    <group scale={1/scale}> 
+      {[0, 1, 2, 3].map((i) => {
+        const angle = (i * Math.PI) / 2 + Math.PI / 4;
+        return (
+          <mesh key={i} position={[0, -0.2, 0]} rotation={[0, -angle, 0]}>
+            <boxGeometry args={[1.08, 0.1, 0.1]} />
+            <meshStandardMaterial color="#A855F7" metalness={0.9} roughness={0.05} />
+            <Edges color="#fff" />
+          </mesh>
+        );
+      })}
+    </group>
+  );
+
+  // Vertical nozzle pipe connecting unit to the manifold floor
+  const VerticalNozzle = () => (
+    <mesh position={[0, -1.8, 0]}>
+      <cylinderGeometry args={[0.1, 0.1, 3.5, 16]} />
+      <meshStandardMaterial color={unit.color} metalness={0.9} roughness={0.1} />
+      <Edges color="#fff" />
+    </mesh>
+  );
+
   switch (unit.type) {
     case 'reactor':
       return (
@@ -171,7 +196,8 @@ function IndustrialEquipment({ unit, color }: { unit: PlantUnit, color: string }
             <mesh position={[0, 0.2, 0]}><boxGeometry args={[0.3, 0.4, 0.3]} />{steelMat}<Edges color={color} /></mesh>
             <mesh position={[0.2, 0, 0]} rotation={[0, 0, Math.PI/2]}><cylinderGeometry args={[0.05, 0.05, 0.4, 8]} />{steelMat}</mesh>
           </group>
-          <SupportBrackets />
+          <SupportBrackets scale={0.7} />
+          <VerticalNozzle />
           <VesselLegs color={color} />
         </group>
       );
@@ -184,7 +210,8 @@ function IndustrialEquipment({ unit, color }: { unit: PlantUnit, color: string }
               <torusGeometry args={[0.42, 0.03, 8, 32]} />{steelMat}
             </mesh>
           ))}
-          <group position={[0, 0.5, 0]}><SupportBrackets /></group>
+          <group position={[0, 0.5, 0]}><SupportBrackets scale={0.7} /></group>
+          <VerticalNozzle />
           <VesselLegs color={color} />
         </group>
       );
@@ -193,15 +220,14 @@ function IndustrialEquipment({ unit, color }: { unit: PlantUnit, color: string }
         <group scale={0.8}>
           <group rotation={[0, 0, Math.PI / 2]}>
             <mesh><cylinderGeometry args={[0.5, 0.5, 1.8, 32]} />{commonMat}<Edges color="#fff" /></mesh>
-            <mesh position={[0, 0.9, 0]} rotation={[Math.PI/2, 0, 0]}><torusGeometry args={[0.55, 0.08, 12, 32]} />{steelMat}<Edges color="#fff" /></mesh>
-            <mesh position={[0, -0.9, 0]} rotation={[Math.PI/2, 0, 0]}><torusGeometry args={[0.55, 0.08, 12, 32]} />{steelMat}<Edges color="#fff" /></mesh>
           </group>
           {/* Cradles connecting to support structure */}
           <group position={[0, -0.5, 0]}>
              <mesh position={[0.5, 0, 0]}><boxGeometry args={[0.2, 0.6, 0.6]} />{steelMat}<Edges color="#fff" /></mesh>
              <mesh position={[-0.5, 0, 0]}><boxGeometry args={[0.2, 0.6, 0.6]} />{steelMat}<Edges color="#fff" /></mesh>
           </group>
-          <group position={[0, -0.7, 0]}><SupportBrackets /></group>
+          <group position={[0, -0.7, 0]}><SupportBrackets scale={0.8} /></group>
+          <VerticalNozzle />
         </group>
       );
     case 'compressor':
@@ -209,7 +235,8 @@ function IndustrialEquipment({ unit, color }: { unit: PlantUnit, color: string }
         <group scale={0.7}>
           <mesh><octahedronGeometry args={[0.8, 0]} /><meshStandardMaterial color={color} metalness={0.9} roughness={0.1} wireframe /></mesh>
           <mesh><octahedronGeometry args={[0.6, 0]} />{commonMat}<Edges color="#fff" /></mesh>
-          <SupportBrackets />
+          <SupportBrackets scale={0.7} />
+          <VerticalNozzle />
           <VesselLegs color={color} />
         </group>
       );
@@ -218,7 +245,8 @@ function IndustrialEquipment({ unit, color }: { unit: PlantUnit, color: string }
         <group scale={0.7}>
           <mesh rotation={[Math.PI/2, 0, 0]}><capsuleGeometry args={[0.4, 1.2, 16, 32]} />{commonMat}<Edges color="#fff" /></mesh>
           <mesh position={[0.45, 0, 0]}><boxGeometry args={[0.1, 0.8, 0.05]} /><meshStandardMaterial color="#00ffff" emissive="#00ffff" emissiveIntensity={0.5} transparent opacity={0.6} /></mesh>
-          <SupportBrackets />
+          <SupportBrackets scale={0.7} />
+          <VerticalNozzle />
           <VesselLegs color={color} />
         </group>
       );
@@ -346,6 +374,22 @@ export default function ReactorScene3D({ units, onUnitClick }: ReactorScene3DPro
         <Suspense fallback={null}>
           <ChemistryBackground />
           <PipeConnections units={units} />
+          {/* Top View Branding Name */}
+          <group position={[0, -2.4, 3]} rotation={[-Math.PI / 2, 0, 0]}>
+            <Text 
+              fontSize={1.5} 
+              color="#FF6B00" 
+              font="/fonts/Inter-Bold.woff" // Fallback to default if not exists
+              anchorX="center" 
+              anchorY="middle"
+              material-metalness={0.9}
+              material-roughness={0.1}
+              material-emissive="#FF6B00"
+              material-emissiveIntensity={0.2}
+            >
+              SUNDRAM
+            </Text>
+          </group>
           {units.map((unit, i) => (
             <ReactorVessel key={unit.id} unit={unit} index={i} total={units.length} onClick={() => onUnitClick(unit)} isHovered={hoveredId === unit.id} onHover={(h) => setHoveredId(h ? unit.id : null)} />
           ))}
