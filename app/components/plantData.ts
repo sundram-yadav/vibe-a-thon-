@@ -180,7 +180,7 @@ export const plantUnits: PlantUnit[] = [
         tech: ['Arduino Uno', 'Arduino Nano', 'Servo Motors', 'Robotics Components'],
         description: 'Participated in Buildathon under the Robotics Club to build a mechanical arm capable of real-world physical tasks.',
         highlights: [
-          'Designed to uplift a Rubik\\'s cube to a height of 1 foot',
+          "Designed to uplift a Rubik's cube to a height of 1 foot",
           'Gained hands-on knowledge of microcontrollers (Uno, Nano)',
           'Worked extensively with different types of servo motors',
           'Learned integration of hardware components and core robotics principles',
