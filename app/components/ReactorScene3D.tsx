@@ -16,8 +16,8 @@ const formulas = [
 
 function ChemistryBackground() {
   const items = useMemo(() => {
-    // 150 floating formulas acting as a very subtle deep background watermark
-    return Array.from({ length: 150 }).map((_, i) => ({
+    // Reduced to 40 formulas for performance stabilization while maintaining watermark spread
+    return Array.from({ length: 40 }).map((_, i) => ({
       text: formulas[i % formulas.length],
       position: [
         (Math.random() - 0.5) * 120, // Wider spread X
@@ -29,7 +29,7 @@ function ChemistryBackground() {
         0,
         (Math.random() - 0.5) * 0.2
       ] as [number, number, number],
-      scale: 1.0 + Math.random() * 2.0, // Made them larger
+      scale: 1.5 + Math.random() * 2.5, // Made them even larger to compensate for lower count
       opacity: 0.01 + Math.random() * 0.03 // Extremely faint opacity for watermark vibe
     }));
   }, []);
@@ -435,7 +435,7 @@ export default function ReactorScene3D({ units, onUnitClick }: ReactorScene3DPro
             minDistance={4}
             maxDistance={18}
             maxPolarAngle={Math.PI / 2 - 0.05} // Cannot go under the floor grid
-            autoRotate={true}
+            autoRotate={!hoveredId}
             autoRotateSpeed={0.5}
             dampingFactor={0.05}
           />
