@@ -1,0 +1,312 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Special+Elite&family=Share+Tech+Mono&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --saffron: #FF6B00;
+  --saffron-light: #FF9A3C;
+  --saffron-glow: rgba(255, 107, 0, 0.4);
+  --deep-amber: #B8500A;
+  --plant-dark: #080810;
+  --plant-steel: #0F0F1A;
+  --pipe-gray: #1E2130;
+  --chalk: #F5F0E8;
+  --chalk-dim: rgba(245, 240, 232, 0.6);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--plant-dark);
+  color: var(--chalk);
+  font-family: 'Share Tech Mono', monospace;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: var(--plant-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--saffron);
+  border-radius: 2px;
+}
+
+/* Glow effects */
+.saffron-glow {
+  box-shadow: 0 0 20px var(--saffron-glow), 0 0 60px rgba(255, 107, 0, 0.2);
+}
+
+.text-glow {
+  text-shadow: 0 0 20px var(--saffron), 0 0 40px rgba(255, 107, 0, 0.5);
+}
+
+/* Pipe styling */
+.pipe {
+  background: linear-gradient(90deg, #2a2a3a, #3d3d55, #2a2a3a);
+  border: 1px solid rgba(255, 107, 0, 0.3);
+}
+
+/* Chalkboard panel */
+.chalkboard {
+  background: rgba(20, 30, 20, 0.9);
+  border: 2px solid rgba(245, 240, 232, 0.3);
+  position: relative;
+}
+
+.chalkboard::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border: 1px solid rgba(245, 240, 232, 0.1);
+  pointer-events: none;
+}
+
+/* Unit card 3D effect */
+.unit-card {
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.unit-card:hover {
+  transform: translateY(-8px) rotateX(5deg);
+  box-shadow: 0 20px 60px rgba(255, 107, 0, 0.3), 0 0 0 1px rgba(255, 107, 0, 0.5);
+}
+
+/* Animated pipe flow */
+@keyframes flowRight {
+  0% { stroke-dashoffset: 100; }
+  100% { stroke-dashoffset: 0; }
+}
+
+@keyframes flowDown {
+  0% { stroke-dashoffset: 100; }
+  100% { stroke-dashoffset: 0; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes steam {
+  0% { transform: translateY(0) scaleX(1); opacity: 0.8; }
+  100% { transform: translateY(-60px) scaleX(2); opacity: 0; }
+}
+
+@keyframes rotate-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-50px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes drawLine {
+  from { stroke-dashoffset: 500; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes particleFloat {
+  0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(-100px) translateX(var(--drift)); opacity: 0; }
+}
+
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+/* Intro animations */
+.animate-fadeInUp {
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Modal backdrop blur */
+.modal-backdrop {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Industrial grid background */
+.grid-bg {
+  background-image: 
+    linear-gradient(rgba(255, 107, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 107, 0, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* Reaction equation style */
+.reaction-eq {
+  font-family: 'Caveat', cursive;
+  letter-spacing: 0.05em;
+}
+
+/* Progress bar */
+.progress-bar {
+  height: 3px;
+  background: linear-gradient(90deg, var(--saffron), var(--saffron-light));
+  box-shadow: 0 0 10px var(--saffron);
+  animation: progressGrow 1.5s ease forwards;
+  transform-origin: left;
+}
+
+@keyframes progressGrow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* ═══════════════════════════════════════════════
+   VIBE-A-THON EFFECTS (6 components)
+   ═══════════════════════════════════════════════ */
+
+/* 1. RIPPLE EFFECT — on click */
+.ripple-btn {
+  position: relative;
+  overflow: hidden;
+}
+.ripple-btn::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 107, 0, 0.35);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  animation: none;
+}
+.ripple-btn.rippling::after {
+  animation: rippleAnim 0.6s ease-out forwards;
+}
+@keyframes rippleAnim {
+  from { width: 0; height: 0; opacity: 1; }
+  to { width: 400px; height: 400px; opacity: 0; }
+}
+
+/* 2. SCROLL REVEAL — elements pop in on scroll */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.scroll-reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+.scroll-reveal.delay-1 { transition-delay: 0.1s; }
+.scroll-reveal.delay-2 { transition-delay: 0.2s; }
+.scroll-reveal.delay-3 { transition-delay: 0.3s; }
+.scroll-reveal.delay-4 { transition-delay: 0.4s; }
+.scroll-reveal.delay-5 { transition-delay: 0.5s; }
+
+/* 3. PARALLAX CONTAINER — depth layers */
+.parallax-slow { transition: transform 0.05s linear; will-change: transform; }
+.parallax-fast { transition: transform 0.02s linear; will-change: transform; }
+
+/* 4. MAGNETIC HOVER GLOW — enhanced unit cards */
+.unit-card {
+  transform-style: preserve-3d;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease;
+  will-change: transform;
+}
+.unit-card:hover {
+  transform: translateY(-10px) rotateX(6deg) rotateY(-2deg) scale(1.03);
+  box-shadow:
+    0 24px 60px rgba(255, 107, 0, 0.35),
+    0 0 0 1px rgba(255, 107, 0, 0.55),
+    0 0 30px rgba(255, 107, 0, 0.15) inset;
+}
+
+/* 5. ANIMATED LOADER RING — enhanced intro */
+.loader-ring {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 107, 0, 0.15);
+  border-top-color: var(--saffron);
+  border-right-color: var(--saffron-light);
+  animation: loaderSpin 1s cubic-bezier(0.6, 0, 0.4, 1) infinite;
+  position: relative;
+}
+.loader-ring::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-bottom-color: rgba(255, 107, 0, 0.5);
+  animation: loaderSpin 1.5s cubic-bezier(0.6, 0, 0.4, 1) infinite reverse;
+}
+@keyframes loaderSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* 6. HOVER BUTTON GLOW — from hover buttons component */
+.glow-btn {
+  position: relative;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+.glow-btn::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, var(--saffron), var(--saffron-light), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+.glow-btn:hover::before { opacity: 1; }
+.glow-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(255, 107, 0, 0.4), 0 0 60px rgba(255, 107, 0, 0.15);
+}
+.glow-btn:active { transform: translateY(0); }
+
+/* BONUS: Shimmer scan effect on 3D scene container */
+@keyframes shimmerScan {
+  0% { transform: translateX(-100%) skewX(-15deg); }
+  100% { transform: translateX(300%) skewX(-15deg); }
+}
+.shimmer-scan::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 30%;
+  background: linear-gradient(90deg, transparent, rgba(255,107,0,0.06), transparent);
+  animation: shimmerScan 4s ease-in-out infinite;
+}
+
