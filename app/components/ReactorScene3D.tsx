@@ -139,7 +139,6 @@ function PipeConnections({ units }: { units: PlantUnit[] }) {
                 color="rgba(255,255,255,0.7)"
                 anchorX="center"
                 anchorY="middle"
-                font="/fonts/SpaceMono-Regular.ttf"
               >
                 {reactions[i % reactions.length]}
               </Text>
