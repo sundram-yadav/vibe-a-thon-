@@ -434,18 +434,16 @@ function ReactorVessel({
   onClick: () => void; isHovered: boolean; onHover: (h: boolean) => void;
 }) {
   const meshRef = useRef<THREE.Group>(null!);
-  const rotationY = useRef(index * 0.5);
   const angle = (index / (total - 1)) * Math.PI * 1.5 - Math.PI * 0.75;
   const radius = 5.8;
   const baseX = Math.sin(angle) * radius;
   const baseZ = -Math.cos(angle) * radius * 0.72;
-  // Equipment sits exactly on top of the skid (skid top is at -2.5+1.2+0.18 = -1.12, approx -1.1)
+  // Equipment sits exactly on top of the skid
   const equipY = -1.1;
 
-  useFrame((_, delta) => {
+  // Only scale on hover — NO individual rotation
+  useFrame(() => {
     if (meshRef.current) {
-      if (!isHovered) rotationY.current += delta * 0.18;
-      meshRef.current.rotation.y = rotationY.current;
       const target = isHovered ? 1.12 : 1.0;
       meshRef.current.scale.lerp(new THREE.Vector3(target, target, target), 0.12);
     }
