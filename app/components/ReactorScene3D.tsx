@@ -2,7 +2,7 @@
 
 import { useRef, useState, Suspense, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Text, OrbitControls, MeshDistortMaterial, Sphere, Cylinder, Box, Grid, Torus, Html } from '@react-three/drei';
+import { Text, Float, OrbitControls, MeshDistortMaterial, Sphere, Cylinder, Box, Grid, Torus, Html } from '@react-three/drei';
 import * as THREE from 'three';
 import { PlantUnit } from './plantData';
 
