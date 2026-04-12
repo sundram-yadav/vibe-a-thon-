@@ -253,11 +253,13 @@ function SeparatorModel({ color }: { color: string }) {
           <mesh position={[0, -0.12, 0]}><boxGeometry args={[0.6, 0.06, 1.1]} /><SteelMat color="#6D28D9" /></mesh>
         </group>
       ))}
-      {/* Level gauge on side */}
-      <mesh position={[0.5, 0, 0]} rotation={[0, 0, 0]}>
-        <cylinderGeometry args={[0.03, 0.03, 1.2, 8]} />
-        <meshStandardMaterial color="#00D4FF" metalness={0.8} emissive="#00D4FF" emissiveIntensity={0.5} />
-      </mesh>
+      {/* Flanges on both ends */}
+      {[-1.05, 1.05].map((y, i) => (
+        <mesh key={i} position={[0, y, 0]} rotation={[Math.PI / 2, 0, 0]}>
+          <torusGeometry args={[0.47, 0.025, 8, 32]} />
+          <SteelMat color="#7C3AED" />
+        </mesh>
+      ))}
     </group>
   );
 }
@@ -312,22 +314,14 @@ function ExchangerModel({ color }: { color: string }) {
         <group key={i}>
           <mesh position={[0, y, 0]}><cylinderGeometry args={[0.5, 0.5, 0.12, 32]} />
             <SteelMat color="#4C1D95" /></mesh>
-          {/* Nozzle on end */}
+          {/* Axial nozzle stub on each end (safe — along axis, no visible float) */}
           <mesh position={[0, y + (i === 0 ? -0.18 : 0.18), 0]}>
             <cylinderGeometry args={[0.08, 0.08, 0.28, 8]} />
             <meshStandardMaterial color={color} metalness={0.9} roughness={0.1} />
           </mesh>
         </group>
       ))}
-      {/* Side shell nozzles */}
-      {[[-0.55, 0.52], [0.55, 0.52], [-0.55, -0.52], [0.55, -0.52]].map(([y, z], i) => (
-        <mesh key={i} position={[z, y, 0]} rotation={[0, 0, Math.PI / 2]}>
-          <cylinderGeometry args={[0.055, 0.055, 0.25, 8]} />
-          <meshStandardMaterial color={i < 2 ? '#00D4FF' : '#FF5722'} metalness={0.9} roughness={0.1}
-            emissive={i < 2 ? '#00D4FF' : '#FF5722'} emissiveIntensity={0.3} />
-        </mesh>
-      ))}
-      {/* Shell flanges */}
+      {/* Shell reinforcement flanges */}
       {[-0.8, 0, 0.8].map((y, i) => (
         <mesh key={i} position={[0, y, 0]} rotation={[Math.PI / 2, 0, 0]}>
           <torusGeometry args={[0.45, 0.025, 8, 32]} />
