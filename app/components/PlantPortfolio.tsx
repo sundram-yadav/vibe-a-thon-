@@ -68,9 +68,9 @@ export default function PlantPortfolio() {
   useScrollReveal();
   useParallax();
 
-  // Prevent background scrolling when modal is open
+  // Prevent background scrolling when modal is open or intro is showing
   useEffect(() => {
-    if (selectedUnit) {
+    if (selectedUnit || showIntro) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -78,7 +78,7 @@ export default function PlantPortfolio() {
     return () => {
       document.body.style.overflow = '';
     };
-  }, [selectedUnit]);
+  }, [selectedUnit, showIntro]);
 
 
   const handleIntroComplete = () => {
