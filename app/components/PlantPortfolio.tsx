@@ -68,6 +68,19 @@ export default function PlantPortfolio() {
   useScrollReveal();
   useParallax();
 
+  // Prevent background scrolling when modal is open
+  useEffect(() => {
+    if (selectedUnit) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [selectedUnit]);
+
+
   const handleIntroComplete = () => {
     setShowIntro(false);
     setTimeout(() => setPlantVisible(true), 300);
